@@ -5,14 +5,19 @@ const Home: NextPage = () => {
     <div className="bg-slate-400 py-20 px-5 grid gap-10 min-h-screen">
       <div className="bg-white p-6 rounded-2xl shadow-xl">
         <span className="font-semibold text-3xl">결제를 확인해 주세요</span>
-        <div className="flex justify-between my-2 mt-4">
-          <span className="text-gray-500">회색 의자</span>
-          <span className="font-semibold">19,000₩</span>
-        </div>
-        <div className="flex justify-between my-2">
-          <span className="text-gray-500">갈색 의자</span>
-          <span className="font-semibold">19,000₩</span>
-        </div>
+        <ul>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div className="flex justify-between my-2 odd:bg-blue-50 even:bg-yellow-100 ">
+              <span className="text-gray-500">갈색 의자</span>
+              <span className="font-semibold">19,000₩</span>
+            </div>
+          ))}
+        </ul>
+        {["a", "b", "c", ""].map((c, i) => (
+          <li key={i} className="bg-red-400 py-2 empty:hidden">
+            {c}
+          </li>
+        ))}
         <div className="flex justify-between mt-2 pt-2 border-t-2 border-dashed">
           <span>전체 금액</span>
           <span className="font-semibold">38,000₩</span>
