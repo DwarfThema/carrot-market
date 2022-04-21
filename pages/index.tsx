@@ -10,7 +10,7 @@ const Home: NextPage = () => {
           <span className="font-semibold">19,000₩</span>
         </div>
         <div className="flex justify-between my-2">
-          <span className="text-gray-500">회색 의자</span>
+          <span className="text-gray-500">갈색 의자</span>
           <span className="font-semibold">19,000₩</span>
         </div>
         <div className="flex justify-between mt-2 pt-2 border-t-2 border-dashed">
@@ -20,7 +20,7 @@ const Home: NextPage = () => {
         <button
           className="mt-5 bg-blue-500 text-white p-3 text-center rounded-xl w-2/4
         hover:bg-teal-500 hover:text-black
-        active:bg-yellow-500 focus:text-red-500"
+        active:bg-yellow-500 focus:text-red-500 transition"
         >
           결제하기
         </button>
@@ -62,9 +62,9 @@ const Home: NextPage = () => {
           <span className="text-xs text-gray-500">Chair</span>
           <div className="mt-3 mb-5 flex justify-between items-center">
             <div className="space-x-2">
-              <button className="w-5 h-5 rounded-full bg-yellow-500" />
-              <button className="w-5 h-5 rounded-full bg-indigo-500" />
-              <button className="w-5 h-5 rounded-full bg-teal-500" />
+              <button className="w-5 h-5 rounded-full bg-yellow-500 focus:ring-2 ring-offset-2 ring-yellow-500 transition" />
+              <button className="w-5 h-5 rounded-full bg-indigo-500 focus:ring-2 ring-offset-2 ring-indigo-500 transition" />
+              <button className="w-5 h-5 rounded-full bg-teal-500 focus:ring-2 ring-offset-2 ring-teal-500 transition" />
             </div>
             <div className="flex items-center space-x-5">
               <button className="rounded-lg bg-blue-200 flex justify-center items-center aspect-square w-8 text-xl text-gray-500">
