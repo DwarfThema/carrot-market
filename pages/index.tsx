@@ -2,12 +2,11 @@ import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   return (
-    <div className="bg-slate-400 py-20 px-5  grid gap-10 min-h-screen ">
-      <div
-        className="bg-white 
-      sm:bg-red-400 md:bg-teal-500 lg:bg-indigo-400 xl:bg-yellow-200 2xl:bg-slate-500
-      p-6 rounded-2xl shadow-xl flex flex-col items-center w-full"
-      >
+    <div
+      className="bg-slate-400 py-20 px-5  min-h-screen
+    grid gap-10 lg:grid-cols-3 xl:grid-cols-3 xl:place-content-center"
+    >
+      <div className="bg-white p-6 rounded-2xl shadow-xl flex flex-col items-center w-full">
         <span className="font-semibold text-3xl w-full">
           결제를 확인해 주세요
         </span>
@@ -35,7 +34,7 @@ const Home: NextPage = () => {
         </button>
       </div>
       <div className="bg-white overflow-hidden rounded-2xl shadow-xl ">
-        <div className="bg-blue-500 p-6 pb-14 ">
+        <div className="portrait:bg-blue-500 landscape:bg-purple-400 p-6 pb-14 ">
           <span className="text-white text-2xl">프로필</span>
         </div>
         <div className="rounded-3xl p-6 bg-white relative -top-5">
@@ -57,7 +56,7 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white p-10 rounded-2xl shadow-xl ">
+      <div className="bg-white p-10 rounded-2xl shadow-xl lg:col-span-2 xl:col-span-1 ">
         <div className="flex justify-between items-center mb-5">
           <span>👈🏻</span>
           <div className="space-x-3">
@@ -93,7 +92,6 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white p-10 rounded-2xl shadow-xl "></div>
     </div>
   );
 };
