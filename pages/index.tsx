@@ -3,21 +3,31 @@ import type { NextPage } from "next";
 const Home: NextPage = () => {
   return (
     <div
-      className="bg-slate-400 py-20 px-5  min-h-screen
+      className=" dark
+      bg-slate-400 py-20 px-5  min-h-screen
     grid gap-10 lg:grid-cols-3 xl:grid-cols-3 xl:place-content-center"
     >
-      <div className="bg-white p-6 rounded-2xl shadow-xl flex flex-col items-center w-full">
-        <span className="font-semibold text-3xl w-full">
+      <div
+        className=" dark:bg-black
+      bg-white p-6 rounded-2xl shadow-xl flex flex-col items-center w-full"
+      >
+        <span
+          className="font-semibold text-3xl w-full
+        dark:text-white
+        "
+        >
           결제를 확인해 주세요
         </span>
         <ul className="w-full">
           {[1, 2, 3, 4, 5].map((i) => (
             <div
               key={i}
-              className="flex justify-between my-2 odd:bg-blue-50 even:bg-yellow-100  "
+              className="flex justify-between my-2 odd:bg-blue-50 even:bg-yellow-100
+                dark:odd:bg-blue-700 dark:even:bg-yellow-800
+              "
             >
-              <span className="text-gray-500">갈색 의자</span>
-              <span className="font-semibold">19,000₩</span>
+              <span className="text-gray-500 dark:text-white">갈색 의자</span>
+              <span className="font-semibold dark:text-white ">19,000₩</span>
             </div>
           ))}
         </ul>
