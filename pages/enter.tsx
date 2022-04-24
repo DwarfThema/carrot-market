@@ -1,19 +1,46 @@
 import { useState } from "react";
 import React from "react";
 
+function cls(...classnames: string[]) {
+  return classnames.join(" ");
+}
+// [1,2,3] = join("/") => "1/2/3"
+
 const Enter = () => {
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => setMethod("email");
   const onPhoneClick = () => setMethod("phone");
   return (
-    <div>
-      <h3>캐럿을 누르세요</h3>
-      <div>
-        <div>
-          <h5>사용할 유형을 선택해 주세요</h5>
-          <div>
-            <button onClick={onEmailClick}>이메일</button>
-            <button onClick={onPhoneClick}>휴대전화</button>
+    <div className="mt-16">
+      <h3 className="text-3xl font-bold text-center">크로플에 환영합니다</h3>
+      <div className="mt-2">
+        <div className="flex flex-col items-center">
+          <h5 className="text-sm text-gray-500 font-medium">
+            로그인 유형을 선택해 주세요
+          </h5>
+          <div className="grid grid-cols-2 gap-16 border-b w-full mt-10 mb-10 ">
+            <button
+              className={cls(
+                "pb-4 font-medium border-b-2",
+                method === "email"
+                  ? "border-purple-500 text-purple-400"
+                  : "text-gray-400 border-transparent"
+              )}
+              onClick={onEmailClick}
+            >
+              이메일
+            </button>
+            <button
+              className={cls(
+                "pb-4 font-medium border-b-2",
+                method === "phone"
+                  ? " border-purple-500 text-purple-400"
+                  : "text-gray-400 border-transparent"
+              )}
+              onClick={onPhoneClick}
+            >
+              휴대전화
+            </button>
           </div>
         </div>
         <form>
@@ -39,7 +66,7 @@ const Enter = () => {
           <div>
             <div />
             <div>
-              <span>외부 로그인 방법</span>
+              <span>소셜 로그인</span>
             </div>
           </div>
           <div>
