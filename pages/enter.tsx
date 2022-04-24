@@ -44,13 +44,14 @@ const Enter = () => {
           </div>
         </div>
         <form className="flex flex-col mt-8">
-          <label className="text-sm font-medium text-gray-700">
+          <label htmlFor="input" className="text-sm font-medium text-gray-700">
             {method === "email" ? "메일주소" : null}
             {method === "phone" ? "전화번호" : null}
           </label>
           <div className="mt-2">
             {method === "email" ? (
               <input
+                id="input"
                 type="email"
                 placeholder="메일 주소를 입력해 주세요"
                 className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 placeholder:text-sm focus:outline-none focus:ring-purple-300 focus:border-purple-300"
@@ -63,6 +64,7 @@ const Enter = () => {
                   +82
                 </span>
                 <input
+                  id="input"
                   type="number"
                   required
                   className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-r-md placeholder-gray-400 placeholder:text-sm focus:outline-none focus:ring-purple-300 focus:border-purple-300"
