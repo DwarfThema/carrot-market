@@ -2,7 +2,7 @@ import { NextPage } from "next";
 
 const Upload: NextPage = () => {
   return (
-    <div className="px-4 py-16">
+    <div className="px-4 py-16 space-y-5">
       <div>
         <label className="w-full cursor-pointer flex items-center justify-center border-2 border-gray-300 border-dashed py-6 h-48 rounded-md text-gray-600 hover:text-purple-300 hover:border-purple-300 ">
           <svg
@@ -21,6 +21,22 @@ const Upload: NextPage = () => {
           </svg>
           <input type="file" className="hidden" />
         </label>
+      </div>
+      <div>
+        <label
+          className="mb-1 block text-sm font-medium text-gray-700"
+          htmlFor="name"
+        >
+          게시글 제목
+        </label>
+        <div className="rounded-md relative flex  items-center shadow-sm">
+          <input
+            id="name"
+            type="email"
+            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-300 focus:border-purple-300"
+            required
+          />
+        </div>
       </div>
       <div className="my-5">
         <label
@@ -45,18 +61,22 @@ const Upload: NextPage = () => {
         </div>
       </div>
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="description"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
           설명
         </label>
         <div>
           <textarea
+            id="description"
             rows={4}
-            className="mt-1 shadow-sm w-full rounded-md border-gray-300 focus:border-purple-300"
+            className="mt-1 shadow-sm w-full rounded-md border-gray-200 focus:border-purple-300 focus:ring-purple-300 focus:outline-none  appearance-none"
           />
         </div>
       </div>
-      <button className="mt-4 bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 border border-transparent rounded-md shadow-lg text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-purple-300 focus:outline-none w-full">
-        Upload product
+      <button className=" w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-purple-300 focus:outline-none ">
+        게시하기
       </button>
     </div>
   );
