@@ -1,42 +1,29 @@
-import { NextPage } from "next";
+import type { NextPage } from "next";
+import Layout from "../../components/layout";
+import Message from "../../components/message";
 
 const ChatDetail: NextPage = () => {
   return (
-    <div className="py-10 px-4 space-y-4">
-      <div className="flex items-start space-x-2">
-        <div className="w-8 h-8 rounded-full bg-slate-400" />
-        <div className="w-1/2 text-gray-700 text-sm p-2 border rounded-md border-gray-300">
-          <p>
-            얼마에 파실거에요? 저 가격 다 알아보고 와서 사기칠 생각은 마세요
-          </p>
-        </div>
-      </div>
-      <div className="flex flex-row-reverse items-start space-x-2 space-x-reverse">
-        <div className="w-8 h-8 rounded-full bg-slate-400" />
-        <div className="w-1/2 text-gray-700 text-sm p-2 border rounded-md border-gray-300">
-          <p>2만원이요</p>
-        </div>
-      </div>
-      <div className="flex items-start space-x-2">
-        <div className="w-8 h-8 rounded-full bg-slate-400" />
-        <div className="w-1/2 text-gray-700 text-sm p-2 border rounded-md border-gray-300">
-          <p>실화입니까?</p>
-        </div>
-      </div>
-      <div className="fixed w-full mx-auto max-w-md bottom-2 left-0 right-0 inset-x-0">
-        <div className="flex items-center relative">
-          <input
-            type="text"
-            className="shaodw-sm rounded-full w-full border-gray-300  focus:outline-none focus:border-purple-400"
-          />
-          <div className="absolute inset-y-0 flex py-1.5 pr-1.5 right-0">
-            <button className="flex items-center bg-purple-400 rounded-full px-3 focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 hover:bg-purple-500 cursor-pointer text-sm text-white">
-              &rarr;
-            </button>
+    <Layout canGoBack title="Steve">
+      <div className="py-10 pb-16 px-4 space-y-4">
+        <Message message="Hi how much are you selling them for?" />
+        <Message message="I want ￦20,000" reversed />
+        <Message message="미쳤어" />
+        <form className="fixed py-2 bg-white  bottom-0 inset-x-0">
+          <div className="flex relative max-w-md items-center  w-full mx-auto">
+            <input
+              type="text"
+              className="shadow-sm rounded-full w-full border-gray-300 focus:ring-purple-500 focus:outline-none pr-12 focus:border-purple-500"
+            />
+            <div className="absolute inset-y-0 flex py-1.5 pr-1.5 right-0">
+              <button className="flex focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 items-center bg-purple-500 rounded-full px-3 hover:bg-purple-600 text-sm text-white">
+                &rarr;
+              </button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
-    </div>
+    </Layout>
   );
 };
 

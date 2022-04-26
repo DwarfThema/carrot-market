@@ -1,89 +1,74 @@
+import type { NextPage } from "next";
 import { useState } from "react";
-import React from "react";
+import Button from "../components/button";
+import Input from "../components/input";
 import { cls } from "../libs/utils";
 
-const Enter = () => {
+const Enter: NextPage = () => {
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => setMethod("email");
   const onPhoneClick = () => setMethod("phone");
   return (
-    <div className="mt-16 px-3">
-      <h3 className="text-3xl font-bold text-center">크로플에 환영합니다</h3>
-      <div className="mt-2">
+    <div className="mt-16 px-4">
+      <h3 className="text-3xl font-bold text-center">Enter to Carrot</h3>
+      <div className="mt-12">
         <div className="flex flex-col items-center">
-          <h5 className="text-sm text-gray-500 font-medium">
-            로그인 유형을 선택해 주세요
-          </h5>
-          <div className="grid grid-cols-2 gap-16 border-b w-full mt-10 ">
+          <h5 className="text-sm text-gray-500 font-medium">Enter using:</h5>
+          <div className="grid  border-b  w-full mt-8 grid-cols-2 ">
             <button
               className={cls(
-                "pb-4 font-medium border-b-2",
+                "pb-4 font-medium text-sm border-b-2",
                 method === "email"
-                  ? "border-purple-500 text-purple-400"
-                  : "text-gray-400 border-transparent"
+                  ? " border-purple-500 text-purple-400"
+                  : "border-transparent hover:text-gray-400 text-gray-500"
               )}
               onClick={onEmailClick}
             >
-              이메일
+              Email
             </button>
             <button
               className={cls(
-                "pb-4 font-medium border-b-2",
+                "pb-4 font-medium text-sm border-b-2",
                 method === "phone"
                   ? " border-purple-500 text-purple-400"
-                  : "text-gray-400 border-transparent"
+                  : "border-transparent hover:text-gray-400 text-gray-500"
               )}
               onClick={onPhoneClick}
             >
-              휴대전화
+              Phone
             </button>
           </div>
         </div>
-        <form className="flex flex-col mt-8">
-          <label htmlFor="input" className="text-sm font-medium text-gray-700">
-            {method === "email" ? "메일주소" : null}
-            {method === "phone" ? "전화번호" : null}
-          </label>
-          <div className="mt-2">
-            {method === "email" ? (
-              <input
-                id="input"
-                type="email"
-                placeholder="메일 주소를 입력해 주세요"
-                className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 placeholder:text-sm focus:outline-none focus:ring-purple-300 focus:border-purple-300"
-                required
-              />
-            ) : null}
-            {method === "phone" ? (
-              <div className="flex rounded-md shadow-sm">
-                <span className="flex items-center justify-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 select-none text-sm">
-                  +82
-                </span>
-                <input
-                  id="input"
-                  type="number"
-                  required
-                  className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-r-md placeholder-gray-400 placeholder:text-sm focus:outline-none focus:ring-purple-300 focus:border-purple-300"
-                />
-              </div>
-            ) : null}
-          </div>
-          <button className="mt-5 bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 border border-transparent rounded-md shadow-lg text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-purple-300 focus:outline-none">
-            {method === "email" ? "인증링크를 받으시겠습니까?" : null}
-            {method === "phone" ? "인증코드를 받으시겠습니까?" : null}
-          </button>
+        <form className="flex flex-col mt-8 space-y-4">
+          {method === "email" ? (
+            <Input name="email" label="Email address" type="email" required />
+          ) : null}
+          {method === "phone" ? (
+            <Input
+              name="phone"
+              label="Phone number"
+              type="number"
+              kind="phone"
+              required
+            />
+          ) : null}
+          {method === "email" ? <Button text={"Get login link"} /> : null}
+          {method === "phone" ? (
+            <Button text={"Get one-time password"} />
+          ) : null}
         </form>
-        <div className="mt-6">
+
+        <div className="mt-8">
           <div className="relative">
-            <div className="absolute w-full border-t border-gray-300  " />
-            <div className="relative -top-3 text-center">
+            <div className="absolute w-full border-t border-gray-300" />
+            <div className="relative -top-3 text-center ">
               <span className="bg-white px-2 text-sm text-gray-500">
-                소셜 로그인
+                Or enter with
               </span>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 mt-6">
-            <button className="flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gra-500 hover:bg-gray-50">
+          <div className="grid grid-cols-2 mt-2 gap-3">
+            <button className="flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
               <svg
                 className="w-5 h-5"
                 aria-hidden="true"
@@ -93,7 +78,7 @@ const Enter = () => {
                 <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
               </svg>
             </button>
-            <button className="flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gra-500 hover:bg-gray-50">
+            <button className="flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
               <svg
                 className="w-5 h-5"
                 aria-hidden="true"
@@ -113,5 +98,4 @@ const Enter = () => {
     </div>
   );
 };
-
 export default Enter;
