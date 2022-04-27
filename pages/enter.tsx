@@ -30,7 +30,6 @@ const Enter: NextPage = () => {
   const onValid = (validForm: EnterForm) => {
     enter(validForm);
   };
-  console.log(loading, data, error);
 
   const onInvalid = (error: EnterForm) => {};
 
