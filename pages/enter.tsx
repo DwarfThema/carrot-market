@@ -1,19 +1,40 @@
 import type { NextPage } from "next";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import Button from "../components/button";
 import Input from "../components/input";
 import { cls } from "../libs/utils";
 
+interface EnterForm {
+  email?: string;
+  phone?: string;
+}
+
 const Enter: NextPage = () => {
+  const { register, reset, handleSubmit } = useForm<EnterForm>();
+
   const [method, setMethod] = useState<"email" | "phone">("email");
-  const onEmailClick = () => setMethod("email");
-  const onPhoneClick = () => setMethod("phone");
+  const onEmailClick = () => {
+    reset();
+    setMethod("email");
+  };
+  const onPhoneClick = () => {
+    reset();
+    setMethod("phone");
+  };
+
+  const onValid = (data: EnterForm) => {};
+
+  const onInvalid = (error: EnterForm) => {};
+
   return (
     <div className="mt-16 px-4">
-      <h3 className="text-3xl font-bold text-center">Enter to Carrot</h3>
+      <h3 className="text-3xl font-bold text-center">캐럿에 환영합니다.</h3>
       <div className="mt-12">
         <div className="flex flex-col items-center">
-          <h5 className="text-sm text-gray-500 font-medium">Enter using:</h5>
+          <h5 className="text-sm text-gray-500 font-medium">
+            로그인 방법을 선택해주세요
+          </h5>
           <div className="grid  border-b  w-full mt-8 grid-cols-2 ">
             <button
               className={cls(
@@ -24,7 +45,7 @@ const Enter: NextPage = () => {
               )}
               onClick={onEmailClick}
             >
-              Email
+              이메일
             </button>
             <button
               className={cls(
@@ -35,26 +56,42 @@ const Enter: NextPage = () => {
               )}
               onClick={onPhoneClick}
             >
-              Phone
+              전화번호
             </button>
           </div>
         </div>
-        <form className="flex flex-col mt-8 space-y-4">
+        <form
+          onSubmit={handleSubmit(onValid)}
+          className="flex flex-col mt-8 space-y-4"
+        >
           {method === "email" ? (
-            <Input name="email" label="Email address" type="email" required />
+            <Input
+              register={register("email", {
+                required: true,
+              })}
+              name="email"
+              label="이메일 주소"
+              type="email"
+              required
+            />
           ) : null}
           {method === "phone" ? (
             <Input
+              register={register("phone", {
+                required: true,
+              })}
               name="phone"
-              label="Phone number"
+              label="전화번호"
               type="number"
               kind="phone"
               required
             />
           ) : null}
-          {method === "email" ? <Button text={"Get login link"} /> : null}
+          {method === "email" ? (
+            <Button text={"로그인 링크를 받으세요"} />
+          ) : null}
           {method === "phone" ? (
-            <Button text={"Get one-time password"} />
+            <Button text={"1회용 패스워드를 받으세요"} />
           ) : null}
         </form>
 
@@ -63,7 +100,7 @@ const Enter: NextPage = () => {
             <div className="absolute w-full border-t border-gray-300" />
             <div className="relative -top-3 text-center ">
               <span className="bg-white px-2 text-sm text-gray-500">
-                Or enter with
+                소셜 로그인
               </span>
             </div>
           </div>
