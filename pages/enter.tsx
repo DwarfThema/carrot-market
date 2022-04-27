@@ -23,7 +23,19 @@ const Enter: NextPage = () => {
     setMethod("phone");
   };
 
-  const onValid = (data: EnterForm) => {};
+  const [submitting, setSubmitting] = useState(false);
+  const onValid = (data: EnterForm) => {
+    setSubmitting(true);
+    fetch("/api/users/enter", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(() => {
+      setSubmitting(false);
+    });
+  };
 
   const onInvalid = (error: EnterForm) => {};
 
@@ -88,10 +100,12 @@ const Enter: NextPage = () => {
             />
           ) : null}
           {method === "email" ? (
-            <Button text={"로그인 링크를 받으세요"} />
+            <Button text={submitting ? "로딩중.." : "로그인 링크를 받으세요"} />
           ) : null}
           {method === "phone" ? (
-            <Button text={"1회용 패스워드를 받으세요"} />
+            <Button
+              text={submitting ? "로딩중.." : "1회용 패스워드를 받으세요"}
+            />
           ) : null}
         </form>
 
