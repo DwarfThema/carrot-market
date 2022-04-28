@@ -1,22 +1,32 @@
 import client from "@libs/server/client";
-import withHandler from "@libs/server/withHandler";
+import withHandler, { ResponseType } from "@libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
+import twilio from "twilio";
+import mail from "@sendgrid/mail";
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+mail.setApiKey(process.env.SENDGRID_KEY!);
+
+async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseType>
+) {
   const { phone, email } = req.body;
-  const payload = phone ? { phone: +phone } : { email };
+  const user = phone ? { phone: +phone } : email ? { email } : null;
+  if (!user) return res.status(400).json({ ok: false });
+  const payload = Math.floor(10000 + Math.random() * 900000) + ""; // + "" 를 붙이면 stringify 된다.
 
   const token = await client.token.create({
     data: {
-      payload: "1234",
+      payload: payload,
       user: {
         connectOrCreate: {
           where: {
-            ...payload,
+            ...user,
           },
           create: {
             name: "이름 모를 버블이",
-            ...payload,
+            ...user,
           },
         },
       },
@@ -25,27 +35,30 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log(token);
   //token 생성
 
-  /*  if (email) {
-    const user = await client.user.findUnique({
-      where: {
-        email: email,
-      },
+  if (phone) {
+    /* 
+    const message = await twilioClient.messages.create({
+      messagingServiceSid: process.env.TWILIO_MSID,
+      to: process.env.MY_PHONE!,
+      body: `인증 번호는 ${payload}입니다.`,
     });
-    //유저가 있는지 확인
-    if (!user) {
-      console.log("유저가 읎당");
+    console.log(message); */
+  } else if (email) {
+    /* 
+    const email = await mail.send({
+      from: "nico@nomadcoders.co",
+      to: "nico@nomadcoders.co",
+      subject: "Your Carrot Market Verification Email",
+      text: `Your token is ${payload}`,
+      html: `<strong>Your token is ${payload}</strong>`,
+    });
+    console.log(email); */
+  }
 
-      await client.user.create({
-        data: {
-          name: "이름 모를 버블이", //디폴트 이름
-          email: email,
-        },
-      });
-      //유저가 없으면 신규 생성
-    }
-    console.log(user);
-  } */
-  return res.status(200).end();
+  return res.json({
+    ok: true,
+  });
 }
+//phone 으로 보냈을때 인증번호
 
 export default withHandler("POST", handler);
