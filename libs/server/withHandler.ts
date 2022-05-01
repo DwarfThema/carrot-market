@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export interface ResponseType {
   ok: boolean;
-  [kye: string]: any;
+  [key: string]: any;
 }
 
 export default function withHandler(
