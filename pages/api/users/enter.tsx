@@ -4,8 +4,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import twilio from "twilio";
 import mail from "@sendgrid/mail";
 
-const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 mail.setApiKey(process.env.SENDGRID_KEY!);
+const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 
 async function handler(
   req: NextApiRequest,
@@ -44,15 +44,14 @@ async function handler(
     });
     console.log(message); */
   } else if (email) {
-    /* 
     const email = await mail.send({
-      from: "nico@nomadcoders.co",
-      to: "nico@nomadcoders.co",
-      subject: "Your Carrot Market Verification Email",
+      from: "junhoya2@naver.com",
+      to: "junhoya2@naver.com",
+      subject: "캐럿 마켓 인증 메일입니다.",
       text: `Your token is ${payload}`,
-      html: `<strong>Your token is ${payload}</strong>`,
+      html: `<h1>환영합니다</h1></br><strong>해당 번호를 인증해주세요 : ${payload}</strong>`,
     });
-    console.log(email); */
+    console.log(email);
   }
 
   return res.json({
