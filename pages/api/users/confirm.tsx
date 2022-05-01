@@ -1,7 +1,7 @@
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
-import { withIronSessionApiRoute } from "iron-session/next";
 import client from "@libs/server/client";
+import { withApiSession } from "@libs/server/withSession";
 
 declare module "iron-session" {
   interface IronSessionData {
@@ -30,12 +30,14 @@ async function handler(
   };
   await req.session.save();
 
-  console.log(req.session.user);
+  await client.token.deleteMany({
+    where: {
+      userId: tokenExists?.userId,
+    },
+  });
+  res.json({ ok: true });
 
   res.status(200).end();
 }
 
-export default withIronSessionApiRoute(withHandler("POST", handler), {
-  cookieName: "carrotsession",
-  password: "dCqw7XKTpBHhvbnXZzJqFnpUTDkWGRAC",
-});
+export default withApiSession(withHandler("POST", handler));
