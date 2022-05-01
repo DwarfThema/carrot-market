@@ -11,16 +11,28 @@ interface EnterForm {
   phone?: string;
 }
 
-interface EnterMutationResult {
+interface TokenForm {
+  token: number;
+}
+
+interface MutationResult {
   ok: boolean;
 }
 
 const Enter: NextPage = () => {
   const [enter, { loading, data, error }] =
-    useMutation<EnterMutationResult>("/api/users/enter");
+    useMutation<MutationResult>("/api/users/enter");
   console.log(data);
 
+  const [
+    confirmToken,
+    { loading: tokenLoading, data: tokenData, error: tokenError },
+  ] = useMutation<MutationResult>("/api/users/confirm");
+
   const { register, reset, handleSubmit } = useForm<EnterForm>();
+
+  const { register: tokenRegi, handleSubmit: tokenSubmit } =
+    useForm<TokenForm>();
 
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => {
@@ -37,13 +49,34 @@ const Enter: NextPage = () => {
     enter(validForm);
   };
 
+  const onTokenValid = (validForm: TokenForm) => {
+    if (tokenLoading) return;
+    confirmToken(validForm);
+  };
+
   const onInvalid = (error: EnterForm) => {};
 
   return (
     <div className="mt-16 px-4">
       <h3 className="text-3xl font-bold text-center">캐럿에 환영합니다.</h3>
       <div className="mt-12">
-        {data?.ok ? null : (
+        {data?.ok ? (
+          <form
+            onSubmit={tokenSubmit(onTokenValid)}
+            className="flex flex-col mt-8 space-y-4"
+          >
+            <Input
+              register={tokenRegi("token", {
+                required: true,
+              })}
+              name="token"
+              label="토큰을 입력해 주세요"
+              type="number"
+              required
+            />
+            <Button text={tokenLoading ? "로딩중.." : "확인"} />
+          </form>
+        ) : (
           <>
             <div className="flex flex-col items-center">
               <h5 className="text-sm text-gray-500 font-medium">

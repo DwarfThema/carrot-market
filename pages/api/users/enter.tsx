@@ -44,6 +44,7 @@ async function handler(
     });
     console.log(message); */
   } else if (email) {
+    /* 
     const email = await mail.send({
       from: "junhoya2@naver.com",
       to: "junhoya2@naver.com",
@@ -51,7 +52,7 @@ async function handler(
       text: `Your token is ${payload}`,
       html: `<h1>환영합니다</h1></br><strong>해당 번호를 인증해주세요 : ${payload}</strong>`,
     });
-    console.log(email);
+    console.log(email); */
   }
 
   return res.json({
