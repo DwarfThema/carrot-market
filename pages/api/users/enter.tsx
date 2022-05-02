@@ -61,4 +61,8 @@ async function handler(
 }
 //phone 으로 보냈을때 인증번호
 
-export default withHandler("POST", handler);
+export default withHandler({
+  method: "POST",
+  handler: handler,
+  isPrivate: false,
+});
