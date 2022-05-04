@@ -27,12 +27,13 @@ const Upload: NextPage = () => {
   const { register, handleSubmit } = useForm<UploadProductForm>();
   const onValid = (data: UploadProductForm) => {
     if (loading) return;
+    console.log(data);
+
     uploadProduct(data);
   };
 
   const router = useRouter();
   useEffect(() => {
-    console.log(data);
     if (data?.ok) {
       router.push(`/products/${data.product.id}`);
     }
@@ -71,7 +72,6 @@ const Upload: NextPage = () => {
           register={register("price", { required: true })}
           required
           label="Price"
-          placeholder="0.00"
           name="price"
           type="text"
           kind="price"
