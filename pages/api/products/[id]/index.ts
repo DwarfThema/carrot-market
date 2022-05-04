@@ -8,7 +8,10 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  const { id } = req.query;
+  const {
+    query: { id },
+    session: { user },
+  } = req;
   //여기에서 id는 string이거나 string[] 이다.
 
   const product = await client.product.findUnique({
@@ -43,7 +46,20 @@ async function handler(
     },
   });
 
-  res.json({ ok: true, product, relatedProducts });
+  const isLiked = Boolean(
+    await client.fav.findFirst({
+      where: {
+        productId: product?.id,
+        userId: user?.id,
+      },
+      select: {
+        id: true,
+      },
+    })
+  );
+  console.log(isLiked);
+
+  res.json({ ok: true, product, isLiked, relatedProducts });
 }
 export default withApiSession(
   withHandler({

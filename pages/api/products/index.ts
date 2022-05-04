@@ -14,12 +14,14 @@ async function handler(
       products,
     });
   }
-  if ((req.method = "POST")) {
+  if (req.method === "POST") {
     const {
       body: { name, price, description },
       session: { user },
     } = req;
-    const product = await client.product.create({
+    console.log("여기요여기", req.body);
+
+    const product = await client?.product?.create({
       data: {
         name,
         price: +price,
