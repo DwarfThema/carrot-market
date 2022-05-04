@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Button from "@components/button";
 import Layout from "@components/layout";
-import useSWR from "swr";
+import useSWR, { SWRConfig, useSWRConfig } from "swr";
 import { Product, User } from "@prisma/client";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -22,13 +22,20 @@ interface ItemDetailRespons {
 const ItemDetail: NextPage = () => {
   const router = useRouter();
 
-  const { data } = useSWR<ItemDetailRespons>(
+  /*   const { mutate: unboundMutate } = useSWRConfig();
+  //useSWRConfig 를 사용하면 전역으로 api 데이터를 활용 할 수 있다. */
+  const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
+
+  const { data, mutate: boundMutate } = useSWR<ItemDetailRespons>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
 
-  const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
-
   const onFavClick = () => {
+    if (!data) return;
+    boundMutate({ ...data, isLiked: !data.isLiked }, false);
+
+    // unboundMutate("/api/users/me", (prev: any) => ({ ok: !prev?.ok }), false);
+
     toggleFav({});
   };
 
