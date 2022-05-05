@@ -9,6 +9,7 @@ async function handler(
 ) {
   const {
     query: { id },
+    session: { user },
   } = req;
 
   const post = await clinet.post.findUnique({
@@ -41,9 +42,22 @@ async function handler(
     },
   });
 
+  const isWondering = Boolean(
+    await clinet.wondering.findFirst({
+      where: {
+        postId: +id.toString(),
+        userId: user?.id,
+      },
+      select: {
+        id: true,
+      },
+    })
+  );
+
   res.json({
     ok: true,
     post,
+    isWondering,
   });
 }
 
