@@ -42,6 +42,8 @@ async function handler(
     },
   });
 
+  if (!post) return res.status(404).end();
+
   const isWondering = Boolean(
     await clinet.wondering.findFirst({
       where: {

@@ -3,10 +3,12 @@ import Layout from "@components/layout";
 import TextArea from "@components/textarea";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { Answer, Post, User, Wondering } from "@prisma/client";
+import { Answer, Post, User } from "@prisma/client";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 
 interface AnswerWithUser extends Answer {
   user: User;
@@ -24,13 +26,20 @@ interface CommunityPostResponse {
   isWondering: boolean;
 }
 
+interface AnswerForm {
+  answer: string;
+}
+
+interface AnswerResponse {
+  ok: boolean;
+  response: Answer;
+}
+
 const CommunityPostDetail: NextPage = () => {
   const router = useRouter();
   const { data, mutate } = useSWR<CommunityPostResponse>(
     router.query.id ? `/api/posts/${router.query.id}` : null
   );
-
-  console.log(data);
 
   const [wonder, { loading, data: wonderData }] = useMutation(
     `/api/posts/${router.query.id}/wonder`
@@ -55,8 +64,26 @@ const CommunityPostDetail: NextPage = () => {
       false
     );
 
-    wonder({});
+    if (!loading) {
+      wonder({});
+    }
   };
+
+  const [sendAnswer, { loading: answerLoading, data: answerData }] =
+    useMutation<AnswerResponse>(`/api/posts/${router.query.id}/answers`);
+
+  const { register, handleSubmit, reset } = useForm<AnswerForm>();
+
+  const onAnswerValid = (form: AnswerForm) => {
+    if (answerLoading) return;
+    sendAnswer(form);
+  };
+
+  useEffect(() => {
+    if (answerData && answerData?.ok) {
+      reset();
+    }
+  }, [answerData, reset]);
 
   return (
     <Layout canGoBack>
@@ -139,16 +166,17 @@ const CommunityPostDetail: NextPage = () => {
             </div>
           </div>
         ))}
-        <div className="px-4">
+        <form onSubmit={handleSubmit(onAnswerValid)} className="px-4">
           <TextArea
+            register={register("answer", { required: true, minLength: 10 })}
             name="description"
-            placeholder="Answer this question!"
+            placeholder="질문을 작성해 주세요!"
             required
           />
           <button className="mt-2 w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 focus:outline-none ">
-            Reply
+            {answerLoading ? "로딩중..." : "답변하기"}
           </button>
-        </div>
+        </form>
       </div>
     </Layout>
   );

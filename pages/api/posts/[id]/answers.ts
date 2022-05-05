@@ -10,6 +10,7 @@ async function handler(
   const {
     query: { id },
     session: { user },
+    body: { answer },
   } = req;
 
   const post = await clinet.post.findUnique({
@@ -17,43 +18,30 @@ async function handler(
       id: +id.toString(),
     },
   });
+
   if (!post) return res.status(404).end();
 
-  const alreadyExists = await clinet.wondering.findFirst({
-    where: {
-      userId: user?.id,
-      postId: +id.toString(),
-    },
-    select: {
-      id: true,
+  const newAnswer = await clinet.answer.create({
+    data: {
+      user: {
+        connect: {
+          id: user?.id,
+        },
+      },
+      post: {
+        connect: {
+          id: +id.toString(),
+        },
+      },
+      answer,
     },
   });
 
-  if (alreadyExists) {
-    await clinet.wondering.delete({
-      where: {
-        id: alreadyExists.id,
-      },
-    });
-  } else {
-    await clinet.wondering.create({
-      data: {
-        user: {
-          connect: {
-            id: user?.id,
-          },
-        },
-        post: {
-          connect: {
-            id: +id.toString(),
-          },
-        },
-      },
-    });
-  }
+  console.log(newAnswer);
 
   res.json({
     ok: true,
+    answer: newAnswer,
   });
 }
 

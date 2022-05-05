@@ -12,6 +12,8 @@ async function handler(
     session: { user: sessionUser },
   } = req;
 
+  if (!id) return res.status(404).end();
+
   const alreadyExists = await client?.fav.findFirst({
     //findUnique는 오직 unique 필드에서만 사용 할 수 있으니 findFirst 를 사용하자.
     where: {
