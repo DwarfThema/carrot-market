@@ -7,6 +7,7 @@ import useMutation from "@libs/client/useMutation";
 import { useEffect } from "react";
 import { Post } from "@prisma/client";
 import { useRouter } from "next/router";
+import useCoords from "@libs/client/useCoords";
 
 interface WirteForm {
   question: string;
@@ -22,9 +23,10 @@ const Write: NextPage = () => {
 
   const [post, { loading, data }] = useMutation<WirteResponse>("/api/posts");
 
+  const { latitude, longitude } = useCoords();
   const onValid = (data: WirteForm) => {
     if (loading) return;
-    post(data);
+    post({ ...data, latitude, longitude });
   };
 
   const router = useRouter();
