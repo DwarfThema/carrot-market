@@ -12,7 +12,7 @@ interface WirteForm {
   question: string;
 }
 
-interface WirtResponse {
+interface WirteResponse {
   ok: boolean;
   post: Post;
 }
@@ -20,7 +20,7 @@ interface WirtResponse {
 const Write: NextPage = () => {
   const { register, handleSubmit } = useForm<WirteForm>();
 
-  const [post, { loading, data }] = useMutation<WirtResponse>("/api/posts");
+  const [post, { loading, data }] = useMutation<WirteResponse>("/api/posts");
 
   const onValid = (data: WirteForm) => {
     if (loading) return;
