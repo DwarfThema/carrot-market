@@ -4,6 +4,7 @@ import FloatingButton from "@components/floating-button";
 import Layout from "@components/layout";
 import useSWR from "swr";
 import { Post, User } from "@prisma/client";
+import useCoords from "@libs/client/useCoords";
 
 interface PostWihtUesr extends Post {
   user: User;
@@ -17,9 +18,11 @@ interface PostsResponse {
   ok: boolean;
   post: PostWihtUesr[];
 }
-
 const Community: NextPage = () => {
-  const { data } = useSWR<PostsResponse>(`/api/posts`);
+  const { latitude, longitude } = useCoords();
+  const { data } = useSWR<PostsResponse>(
+    `/api/posts?latitude=${latitude}&longitude=${longitude}`
+  );
 
   return (
     <Layout hasTabBar title="동네생활">
