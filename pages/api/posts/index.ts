@@ -12,26 +12,52 @@ async function handler(
     session: { user },
   } = req;
 
-  const post = await clinet?.post.create({
-    data: {
-      question,
-      user: {
-        connect: {
-          id: user?.id,
+  if (req.method === "POST") {
+    const post = await clinet?.post.create({
+      data: {
+        question,
+        user: {
+          connect: {
+            id: user?.id,
+          },
         },
       },
-    },
-  });
+    });
+    res.json({
+      ok: true,
+      post,
+    });
+  }
 
-  res.json({
-    ok: true,
-    post,
-  });
+  if (req.method === "GET") {
+    const post = await clinet.post.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        _count: {
+          select: {
+            wonderings: true,
+            answers: true,
+          },
+        },
+      },
+    });
+
+    res.json({
+      ok: true,
+      post,
+    });
+  }
 }
 
 export default withApiSession(
   withHandler({
-    methods: ["POST"],
+    methods: ["GET", "POST"],
     handler: handler,
   })
 );
