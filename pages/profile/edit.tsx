@@ -5,11 +5,18 @@ import Layout from "@components/layout";
 import useUser from "@libs/client/useUser";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import useMutation from "@libs/client/useMutation";
 
 interface EditProfileForm {
   email?: string;
   phone?: string;
+  name?: string;
   formErrors?: string;
+}
+
+interface EditProfileResponse {
+  ok: boolean;
+  error?: string;
 }
 
 const EditProfile: NextPage = () => {
@@ -26,14 +33,32 @@ const EditProfile: NextPage = () => {
   useEffect(() => {
     if (user?.email) setValue("email", user.email);
     if (user?.phone) setValue("phone", user.phone);
+    if (user?.name) setValue("name", user.name);
   }, [user, setValue]);
 
-  const onValid = ({ email, phone }: EditProfileForm) => {
-    if (email === "" && phone === "") {
-      setError("formErrors", {
+  const [editProfile, { data, loading }] =
+    useMutation<EditProfileResponse>(`/api/users/me`);
+
+  useEffect(() => {
+    if (data && !data.ok && data.error) {
+      setError("formErrors", { message: data?.error });
+    }
+  }, [data, setError]);
+
+  const onValid = ({ email, phone, name }: EditProfileForm) => {
+    if (loading) return;
+
+    if (email === "" && phone === "" && name === "") {
+      return setError("formErrors", {
         message: "이메일이나 휴대번호를 반드시 입력해야 합니다.",
       });
     }
+
+    editProfile({
+      email,
+      phone,
+      name,
+    });
   };
 
   return (
@@ -55,6 +80,12 @@ const EditProfile: NextPage = () => {
           </label>
         </div>
         <Input
+          register={register("name")}
+          label="닉네임 변경"
+          name="name"
+          type="text"
+        />
+        <Input
           register={register("email")}
           label="이메일 주소"
           name="email"
@@ -72,7 +103,7 @@ const EditProfile: NextPage = () => {
             {errors.formErrors.message}
           </span>
         ) : null}
-        <Button text="수정 완료" />
+        <Button text={loading ? "로딩중 입니다.." : "수정 완료"} />
       </form>
     </Layout>
   );

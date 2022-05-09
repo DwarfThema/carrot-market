@@ -7,21 +7,116 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  const profile = await client.user.findUnique({
-    where: {
-      id: req.session.user?.id,
-    },
-  });
+  if (req.method === "GET") {
+    const profile = await client.user.findUnique({
+      where: {
+        id: req.session.user?.id,
+      },
+    });
 
-  res.json({
-    ok: true,
-    profile,
-  });
+    res.json({
+      ok: true,
+      profile,
+    });
+  }
+
+  if (req.method === "POST") {
+    const {
+      session: { user },
+      body: { email, phone, name },
+    } = req;
+
+    const currentUser = await client.user.findUnique({
+      where: {
+        id: user?.id,
+      },
+    });
+
+    if (email && email !== currentUser?.email) {
+      const alreadyExist = Boolean(
+        await client.user.findUnique({
+          where: {
+            email: email,
+          },
+          select: {
+            id: true,
+          },
+        })
+      );
+
+      if (alreadyExist) {
+        return res.json({
+          ok: false,
+          error: "이메일이 이미 존재합니다.",
+        });
+      }
+
+      await client.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          email: email,
+        },
+      });
+      res.json({
+        ok: true,
+      });
+    }
+    if (phone && phone !== currentUser?.phone) {
+      const alreadyExist = Boolean(
+        await client.user.findUnique({
+          where: {
+            phone: phone,
+          },
+          select: {
+            id: true,
+          },
+        })
+      );
+
+      if (alreadyExist) {
+        return res.json({
+          ok: false,
+          error: "휴대번호가 이미 존재합니다.",
+        });
+      }
+
+      await client.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          phone: phone,
+        },
+      });
+      res.json({
+        ok: true,
+      });
+    }
+    if (name) {
+      await client.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          name: name,
+        },
+      });
+      res.json({
+        ok: true,
+      });
+    }
+
+    res.json({
+      ok: true,
+    });
+  }
 }
 
 export default withApiSession(
   withHandler({
-    methods: ["GET"],
+    methods: ["GET", "POST"],
     handler: handler,
   })
 );
