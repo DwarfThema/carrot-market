@@ -13,7 +13,7 @@ async function handler(
   } = req;
 
   if (req.method === "POST") {
-    const steram = client.stream.create({
+    const stream = await client.stream.create({
       data: {
         name,
         price,
@@ -28,11 +28,13 @@ async function handler(
 
     res.json({
       ok: true,
-      steram,
+      stream,
     });
   }
 
   if (req.method === "GET") {
+    const streams = await client.stream.findMany();
+    res.json({ ok: true, streams });
   }
 }
 export default withApiSession(

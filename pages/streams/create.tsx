@@ -30,6 +30,7 @@ const Create: NextPage = () => {
 
   const onValid = (form: CreateForm) => {
     if (loading) return;
+
     createStream(form);
   };
 
@@ -50,7 +51,7 @@ const Create: NextPage = () => {
           type="text"
         />
         <Input
-          register={register("price", { required: true })}
+          register={register("price", { required: true, valueAsNumber: true })}
           required
           label="가격"
           placeholder="0.00"
