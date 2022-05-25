@@ -42,21 +42,37 @@ const Stream: NextPage = () => {
     `/api/streams/${router.query.id}/messages`
   );
 
+  const { data, mutate } = useSWR<StreamResponse>(
+    router.query.id ? `/api/streams/${router.query.id}` : null,
+    {
+      refreshInterval: 1000,
+    }
+  );
+
   const onValid = (form: MessageForm) => {
     if (loading) return;
     reset();
-    sendMessage(form);
+    mutate(
+      (prev) =>
+        prev &&
+        ({
+          ...prev,
+          stream: {
+            ...prev.stream,
+            messages: [
+              ...prev.stream.messages,
+              {
+                id: Date.now(),
+                message: form.message,
+                user: { ...user },
+              },
+            ],
+          },
+        } as any),
+      false
+    );
+    // sendMessage(form);
   };
-
-  const { data, mutate } = useSWR<StreamResponse>(
-    router.query.id ? `/api/streams/${router.query.id}` : null
-  );
-
-  useEffect(() => {
-    if (sendMessageData && sendMessageData.ok) {
-      mutate();
-    }
-  }, [sendMessageData, mutate]);
 
   return (
     <Layout canGoBack>
