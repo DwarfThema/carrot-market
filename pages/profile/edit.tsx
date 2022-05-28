@@ -4,13 +4,14 @@ import Input from "@components/input";
 import Layout from "@components/layout";
 import useUser from "@libs/client/useUser";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useMutation from "@libs/client/useMutation";
 
 interface EditProfileForm {
   email?: string;
   phone?: string;
   name?: string;
+  avatar?: FileList;
   formErrors?: string;
 }
 
@@ -27,6 +28,7 @@ const EditProfile: NextPage = () => {
     setValue,
     handleSubmit,
     setError,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -45,7 +47,7 @@ const EditProfile: NextPage = () => {
     }
   }, [data, setError]);
 
-  const onValid = ({ email, phone, name }: EditProfileForm) => {
+  const onValid = ({ email, phone, name, avatar }: EditProfileForm) => {
     if (loading) return;
 
     if (email === "" && phone === "" && name === "") {
@@ -61,17 +63,36 @@ const EditProfile: NextPage = () => {
     });
   };
 
+  const [avatarPreview, setAvatarPreview] = useState("");
+
+  const avatar = watch("avatar");
+
+  useEffect(() => {
+    if (avatar && avatar.length > 0) {
+      const file = avatar[0];
+      setAvatarPreview(URL.createObjectURL(file));
+    }
+  }, [avatar]);
+
   return (
     <Layout canGoBack title="프로필 수정">
       <form onSubmit={handleSubmit(onValid)} className="py-10 px-4 space-y-4">
         <div className="flex items-center space-x-3">
-          <div className="w-14 h-14 rounded-full bg-slate-500" />
+          {avatarPreview ? (
+            <img
+              src={avatarPreview}
+              className="w-14 h-14 rounded-full bg-slate-500"
+            />
+          ) : (
+            <div className="w-14 h-14 rounded-full bg-slate-500" />
+          )}
           <label
             htmlFor="picture"
             className="cursor-pointer py-2 px-3 border hover:bg-gray-50 border-gray-300 rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 text-gray-700"
           >
             변경
             <input
+              {...register("avatar")}
               id="picture"
               type="file"
               className="hidden"
