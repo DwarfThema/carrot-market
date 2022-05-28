@@ -56,12 +56,18 @@ const EditProfile: NextPage = () => {
       });
     }
 
-    if (avatar && avatar.length > 0) {
+    if (avatar && avatar.length > 0 && user) {
       // 클라우드 플레어에게 빈 URL 을 요청
-      const cloudFlareRequest = await (await fetch(`/api/files`)).json();
-      console.log(cloudFlareRequest);
+      const { id, uploadURL } = await (await fetch(`/api/files`)).json();
 
       // URL에 사진 업로드
+      const form = new FormData();
+      form.append("file", avatar[0], user?.id + "");
+      await fetch(uploadURL, {
+        method: "POST",
+        body: form,
+      });
+
       return;
 
       editProfile({
