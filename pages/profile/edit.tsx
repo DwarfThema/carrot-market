@@ -47,7 +47,7 @@ const EditProfile: NextPage = () => {
     }
   }, [data, setError]);
 
-  const onValid = ({ email, phone, name, avatar }: EditProfileForm) => {
+  const onValid = async ({ email, phone, name, avatar }: EditProfileForm) => {
     if (loading) return;
 
     if (email === "" && phone === "" && name === "") {
@@ -56,11 +56,26 @@ const EditProfile: NextPage = () => {
       });
     }
 
-    editProfile({
-      email,
-      phone,
-      name,
-    });
+    if (avatar && avatar.length > 0) {
+      // 클라우드 플레어에게 빈 URL 을 요청
+      const cloudFlareRequest = await (await fetch(`/api/files`)).json();
+      console.log(cloudFlareRequest);
+
+      // URL에 사진 업로드
+      return;
+
+      editProfile({
+        email,
+        phone,
+        name,
+      });
+    } else {
+      editProfile({
+        email,
+        phone,
+        name,
+      });
+    }
   };
 
   const [avatarPreview, setAvatarPreview] = useState("");
