@@ -36,6 +36,10 @@ const EditProfile: NextPage = () => {
     if (user?.email) setValue("email", user.email);
     if (user?.phone) setValue("phone", user.phone);
     if (user?.name) setValue("name", user.name);
+    if (user?.avatar)
+      setAvatarPreview(
+        `https://imagedelivery.net/vh_ffc8wJCg_qAXLZyMBUg/${user?.avatar}/public`
+      );
   }, [user, setValue]);
 
   const [editProfile, { data, loading }] =
@@ -58,22 +62,25 @@ const EditProfile: NextPage = () => {
 
     if (avatar && avatar.length > 0 && user) {
       // 클라우드 플레어에게 빈 URL 을 요청
-      const { id, uploadURL } = await (await fetch(`/api/files`)).json();
+      const { uploadURL } = await (await fetch(`/api/files`)).json();
 
       // URL에 사진 업로드
       const form = new FormData();
       form.append("file", avatar[0], user?.id + "");
-      await fetch(uploadURL, {
-        method: "POST",
-        body: form,
-      });
-
-      return;
+      const {
+        result: { id },
+      } = await (
+        await fetch(uploadURL, {
+          method: "POST",
+          body: form,
+        })
+      ).json();
 
       editProfile({
         email,
         phone,
         name,
+        avatarId: id,
       });
     } else {
       editProfile({
