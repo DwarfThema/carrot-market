@@ -24,7 +24,7 @@ async function handler(
   }
   if (req.method === "POST") {
     const {
-      body: { name, price, description },
+      body: { name, price, description, photoId },
       session: { user },
     } = req;
     console.log("여기요여기", req.body);
@@ -34,7 +34,7 @@ async function handler(
         name,
         price: +price,
         description,
-        image: "xx", //테스트
+        image: photoId,
         user: {
           connect: {
             id: user?.id,
