@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
+import Image from "next/image";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -49,7 +50,10 @@ const ItemDetail: NextPage = () => {
           />
           <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
             {data?.product.user.avatar ? (
-              <img
+              <Image
+                width={48}
+                height={48}
+                quality={100}
                 src={`https://imagedelivery.net/vh_ffc8wJCg_qAXLZyMBUg/${data?.product.user.avatar}/avatar`}
                 className="w-12 h-12 rounded-full bg-slate-300"
               />
