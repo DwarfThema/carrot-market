@@ -6,6 +6,7 @@ import useUser from "@libs/client/useUser";
 import Head from "next/head";
 import useSWR from "swr";
 import { Product } from "@prisma/client";
+import clinet from "@libs/server/client";
 
 export interface ProductWithUser extends Product {
   _count: { favs: number };
@@ -16,9 +17,9 @@ interface ProductsResponse {
   products: ProductWithUser[];
 }
 
-const Home: NextPage = () => {
+const Home: NextPage<{ products: ProductWithUser[] }> = ({ products }) => {
   const { user, isLoading } = useUser();
-  const { data } = useSWR<ProductsResponse>("/api/products");
+  //const { data } = useSWR<ProductsResponse>("/api/products");
 
   return (
     <Layout title="홈" hasTabBar>
@@ -26,15 +27,19 @@ const Home: NextPage = () => {
         <title>홈</title>
       </Head>
       <div className="flex flex-col space-y-5 divide-y">
-        {data?.products?.map((product) => (
-          <Item
-            id={product.id}
-            key={product.id}
-            title={product.name}
-            price={product.price}
-            hearts={product._count.favs}
-          />
-        ))}
+        {products ? (
+          products?.map((product) => (
+            <Item
+              id={product.id}
+              key={product.id}
+              title={product.name}
+              price={product.price}
+              hearts={product._count?.favs}
+            />
+          ))
+        ) : (
+          <span>로딩중..</span>
+        )}
         <FloatingButton href="/products/upload">
           <svg
             className="h-6 w-6"
@@ -56,5 +61,15 @@ const Home: NextPage = () => {
     </Layout>
   );
 };
+
+export async function getServerSideProps() {
+  const products = await clinet.product.findMany({});
+  console.log(products);
+  return {
+    props: {
+      products: JSON.parse(JSON.stringify(products)),
+    },
+  };
+}
 
 export default Home;
