@@ -6,7 +6,7 @@ import useUser from "@libs/client/useUser";
 import Head from "next/head";
 import useSWR, { SWRConfig } from "swr";
 import { Product } from "@prisma/client";
-import clinet from "@libs/server/client";
+import client from "@libs/server/client";
 
 export interface ProductWithCount extends Product {
   _count: { favs: number };
@@ -80,7 +80,7 @@ const Page: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
 };
 
 export async function getServerSideProps() {
-  const products = await clinet.product.findMany({});
+  const products = await client.product.findMany({});
   console.log(products);
   return {
     props: {
