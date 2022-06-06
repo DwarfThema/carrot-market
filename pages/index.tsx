@@ -4,22 +4,22 @@ import Item from "@components/item";
 import Layout from "@components/layout";
 import useUser from "@libs/client/useUser";
 import Head from "next/head";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 import { Product } from "@prisma/client";
 import clinet from "@libs/server/client";
 
-export interface ProductWithUser extends Product {
+export interface ProductWithCount extends Product {
   _count: { favs: number };
 }
 
 interface ProductsResponse {
   ok: boolean;
-  products: ProductWithUser[];
+  products: ProductWithCount[];
 }
 
-const Home: NextPage<{ products: ProductWithUser[] }> = ({ products }) => {
+const Home: NextPage = () => {
   const { user, isLoading } = useUser();
-  //const { data } = useSWR<ProductsResponse>("/api/products");
+  const { data } = useSWR<ProductsResponse>("/api/products");
 
   return (
     <Layout title="홈" hasTabBar>
@@ -27,14 +27,14 @@ const Home: NextPage<{ products: ProductWithUser[] }> = ({ products }) => {
         <title>홈</title>
       </Head>
       <div className="flex flex-col space-y-5 divide-y">
-        {products ? (
-          products?.map((product) => (
+        {data?.products ? (
+          data.products?.map((product) => (
             <Item
               id={product.id}
               key={product.id}
               title={product.name}
               price={product.price}
-              hearts={product._count?.favs}
+              hearts={product._count?.favs || 0}
             />
           ))
         ) : (
@@ -62,6 +62,23 @@ const Home: NextPage<{ products: ProductWithUser[] }> = ({ products }) => {
   );
 };
 
+const Page: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/products": {
+            ok: true,
+            products,
+          },
+        },
+      }}
+    >
+      <Home />
+    </SWRConfig>
+  );
+};
+
 export async function getServerSideProps() {
   const products = await clinet.product.findMany({});
   console.log(products);
@@ -72,4 +89,4 @@ export async function getServerSideProps() {
   };
 }
 
-export default Home;
+export default Page;
