@@ -170,6 +170,8 @@ const Page: NextPage<{ profile: User }> = ({ profile }) => {
 export const getServerSideProps = withSsrSession(async function (
   ctx: NextPageContext
 ) {
+  console.log(ctx?.req?.session);
+  //withSsrSession 으로 인해 session 을 해독하기 가능해짐
   const profile = await client.user.findUnique({
     where: { id: ctx?.req?.session?.user?.id },
   });
