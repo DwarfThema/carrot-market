@@ -1,4 +1,4 @@
-import { ProductWithUser } from "pages";
+import { ProductWithCount } from "pages";
 import useSWR from "swr";
 import Item from "./item";
 
@@ -8,7 +8,7 @@ interface ProductListProps {
 
 interface Record {
   id: number;
-  product: ProductWithUser;
+  product: ProductWithCount;
 }
 
 interface ProductListResponse {
