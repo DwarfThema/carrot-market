@@ -27,15 +27,12 @@ const ItemDetail: NextPage<ItemDetailRespons> = ({
   isLiked,
 }) => {
   const router = useRouter();
-
   /*   const { mutate: unboundMutate } = useSWRConfig();
   //useSWRConfig 를 사용하면 전역으로 api 데이터를 활용 할 수 있다. */
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
-
   const { data, mutate: boundMutate } = useSWR<ItemDetailRespons>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
-
   const onFavClick = () => {
     if (!data) return;
     boundMutate({ ...data, isLiked: !data.isLiked }, false);
@@ -44,6 +41,7 @@ const ItemDetail: NextPage<ItemDetailRespons> = ({
 
     toggleFav({});
   };
+
   if (router.isFallback) {
     return (
       <Layout>
