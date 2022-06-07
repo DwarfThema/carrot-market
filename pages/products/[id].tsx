@@ -44,6 +44,13 @@ const ItemDetail: NextPage<ItemDetailRespons> = ({
 
     toggleFav({});
   };
+  if (router.isFallback) {
+    return (
+      <Layout>
+        <span>잠시만 기다려 주세요...</span>
+      </Layout>
+    );
+  }
 
   return (
     <Layout canGoBack seoTitle="Product Detail">
@@ -154,7 +161,8 @@ const ItemDetail: NextPage<ItemDetailRespons> = ({
 export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
-    fallback: "blocking",
+    fallback: true,
+    //fallback은 "blocking", true, false 3가지를 사용할 수 있음
   };
 };
 

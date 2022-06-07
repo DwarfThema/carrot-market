@@ -17,17 +17,17 @@ const Post: NextPage<{ post: string; data: any }> = ({ post, data }) => {
   );
 };
 
-export function getStaticPaths() {
-  const files = readdirSync("./posts").map((file) => {
+export const getStaticPaths: GetStaticPaths = () => {
+  /*   const files = readdirSync("./posts").map((file) => {
     const [name, extention] = file.split(".");
     return { params: { slug: name } };
-  });
+  }); */
 
   return {
-    paths: files,
-    fallback: false,
+    paths: [],
+    fallback: "blocking",
   };
-}
+};
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { content, data } = matter.read(`./posts/${ctx.params?.slug}.md`);
