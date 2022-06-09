@@ -70,7 +70,7 @@ const Enter: NextPage = () => {
       <Head>
         <title>입장 | 캐럿 마켓</title>
       </Head>
-      <h3 className="text-3xl font-bold text-center">캐럿에 로그인 하세요</h3>
+      <h3 className="text-3xl font-bold text-center">캐럿</h3>
       <div className="mt-12">
         {data?.ok ? (
           <form
