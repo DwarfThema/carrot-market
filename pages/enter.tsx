@@ -46,7 +46,7 @@ const Enter: NextPage = () => {
     setMethod("phone");
   };
 
-  const [submitting, setSubmitting] = useState(false);
+  const [submitting] = useState(false);
   const onValid = (validForm: EnterForm) => {
     enter(validForm);
   };
