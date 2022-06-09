@@ -1,7 +1,7 @@
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest, ev: NextFetchEvent) {
-  if (!req.ua?.isBot) {
+  if (req.ua?.isBot) {
     return new Response("봇으로 접속하지 마세요.", { status: 403 });
   }
 
